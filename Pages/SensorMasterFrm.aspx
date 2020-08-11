@@ -1,16 +1,11 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/ConsisTrack.master" AutoEventWireup="true" CodeFile="GPSMasterFrm.aspx.cs" Inherits="Pages_GPSMasterFrm" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Pages/ConsisTrack.master" AutoEventWireup="true" CodeFile="SensorMasterFrm.aspx.cs" Inherits="Pages_SensorMasterFrm" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
-
-    <link href="../dist/css/dataTables/datatables.min.css" rel="stylesheet" />
-    <style>
- 
-    </style>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
+      <link href="../dist/css/dataTables/datatables.min.css" rel="stylesheet" />
 </asp:Content>
-
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
     <input id="hdnID" value="" hidden="hidden" />
-    <input id="hdnGPSID" value="" hidden="hidden" />
+    <input id="hdnSensorID" value="" hidden="hidden" />
 
     <div>
         <div class="col-md-12">
@@ -18,10 +13,10 @@
                 <div class="card-header p-0 pt-1">
                     <ul class="nav nav-tabs" id="custom-tabs-five-tab" role="tablist">
                         <li class="nav-item ">
-                            <a class="nav-link active" id="custom-tabs-five-overlay-dark-tab" data-toggle="pill" href="#custom-tabs-five-overlay-dark" role="tab" aria-controls="custom-tabs-five-overlay-dark" aria-selected="true">GPS List</a>
+                            <a class="nav-link active" id="custom-tabs-five-overlay-dark-tab" data-toggle="pill" href="#custom-tabs-five-overlay-dark" role="tab" aria-controls="custom-tabs-five-overlay-dark" aria-selected="true">Sensor List</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-five-normal-tab" data-toggle="pill" href="#custom-tabs-five-normal" role="tab" aria-controls="custom-tabs-five-normal" aria-selected="false">+ Add GPS</a>
+                            <a class="nav-link" id="custom-tabs-five-normal-tab" data-toggle="pill" href="#custom-tabs-five-normal" role="tab" aria-controls="custom-tabs-five-normal" aria-selected="false">+ Add Sensor</a>
                         </li>
 
                     </ul>
@@ -45,15 +40,15 @@
                                 <div class="col-lg-12 ">
                                     <div class="float-right">
                                         <div class="form-check form-check-inline badge badge-success">
-                                            <input class="form-check-input " type="radio" onchange="GetGPSList('1')" name="inlineRadioOptions" id="inlineRadio1" value="1" checked="checked" />
+                                            <input class="form-check-input " type="radio" onchange="GetSensorList('1')" name="inlineRadioOptions" id="inlineRadio1" value="1" checked="checked" />
                                             <label class="form-check-label text-bold" for="inlineRadio1">Active</label>
                                         </div>
                                         <div class="form-check form-check-inline badge badge-danger">
-                                            <input class="form-check-input" type="radio" onchange="GetGPSList('0')" name="inlineRadioOptions" id="inlineRadio2" value="0" />
+                                            <input class="form-check-input" type="radio" onchange="GetSensorList('0')" name="inlineRadioOptions" id="inlineRadio2" value="0" />
                                             <label class="form-check-label text-bold" for="inlineRadio2">InActive</label>
                                         </div>
                                         <div class="form-check form-check-inline badge badge-info">
-                                            <input class="form-check-input" type="radio" onchange="GetGPSList('2')" name="inlineRadioOptions" id="inlineRadio3" value="2" />
+                                            <input class="form-check-input" type="radio" onchange="GetSensorList('2')" name="inlineRadioOptions" id="inlineRadio3" value="2" />
                                             <label class="form-check-label text-bold" for="inlineRadio3">All</label>
                                         </div>
 
@@ -66,18 +61,22 @@
                                     <div class="text-bold pt-2">Loading...</div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table id="tblGpsList" class="table table-striped table-bordered table-hover dataTables-example">
+                                    <table id="tblSensorList" class="table table-striped table-bordered table-hover dataTables-example">
                                         <thead>
                                             <tr>
                                                 <th>Update</th>
                                                 <th>A/D</th>
                                                 <th></th>
-                                                <th>GPSID</th>
+                                                <th>SensorID</th>
                                                 <th>Vendor</th>
                                                 <th>DOP</th>
                                                 <th>Device Model</th>
                                                 <th>ATModel</th>
-                                                <th>IMEI No</th>
+                                                <th>MAC No</th>
+                                                <th>Serial No</th>
+                                                <th>Device Id</th>
+                                                <th>Length</th>
+                                                <th>Description</th>
                                                 <th>Status</th>
                                                 <th>Remarks</th>
                                                 <th>Created By</th>
@@ -91,15 +90,18 @@
                                         <tfoot>
                                             <tr>
                                                 <th>Update</th>
-
                                                 <th>A/D</th>
                                                 <th></th>
-                                                <th>GPSID</th>
+                                                <th>SensorID</th>
                                                 <th>Vendor</th>
                                                 <th>DOP</th>
                                                 <th>Device Model</th>
                                                 <th>ATModel</th>
-                                                <th>IMEI No</th>
+                                                <th>MAC No</th>
+                                                <th>Serial No</th>
+                                                <th>Device Id</th>
+                                                <th>Length</th>
+                                                <th>Description</th>
                                                 <th>Status</th>
                                                 <th>Remarks</th>
                                                 <th>Created By</th>
@@ -151,10 +153,42 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <label class="control-label " for="txtUserCode">
-                                        IMEI No<span class="font-bold" style="color: red">*</span>
+                                        MAC No<span class="font-bold" style="color: red">*</span>
                                     </label>
-                                    <input class="form-control" id="txtIMEINo" placeholder="IMEI No" type="text" />
-                                    <p class="text-muted text-left font-italic"><small>Enter the IMEI No</small></p>
+                                    <input class="form-control" id="txtMACNo" placeholder="MAC No" type="text" />
+                                    <p class="text-muted text-left font-italic"><small>Enter the MAC No</small></p>
+                                </div>
+                                <div class=" col-lg-3  ">
+                               <label class="control-label " for="txtUserCode">
+                                        Serial No<span class="font-bold" style="color: red">*</span>
+                                    </label>
+                                    <input class="form-control" id="txtSerialNo" placeholder="Serial No" type="text" />
+                                    <p class="text-muted text-left font-italic"><small>Enter the Serial No</small></p>
+                                </div>
+                                <div class=" col-lg-3 ">
+                                    <label class="control-label " for="name1">
+                                        Device Id
+                                    </label>
+                                    <input type="text" class="form-control" id="txtDeviceId" placeholder="Device Id" />
+                                    <p class="text-muted text-left font-italic"><small>Ener the Device Id</small></p>
+
+                                </div>
+                                <div class=" col-lg-3 ">
+                                   <label class="control-label " for="name1">
+                                        Length
+                                    </label>
+                                    <input type="text" class="form-control" id="txtLength" placeholder="Length" />
+                                    <p class="text-muted text-left font-italic"><small>Ener the Length</small></p>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <label class="control-label " for="txtUserCode">
+                                        Description<span class="font-bold" style="color: red">*</span>
+                                    </label>
+                                    <input class="form-control" id="txtDescription" placeholder="Description" type="text" />
+                                    <p class="text-muted text-left font-italic"><small>Enter the Description</small></p>
                                 </div>
                                 <div class=" col-lg-3  ">
                                     <label class="control-label " for="name1">
@@ -192,7 +226,7 @@
                                 <div class="col-lg-12 m-auto text-right">
                                     <button id="btnSave" type="button" onclick="Save();" class="btn  btn-outline-secondary btn-md"><i class="fas fa-save"></i>Save</button>
                                     <button id="btnReset" type="button" onclick="return Reset();" class="btn  btn-outline-secondary btn-md"><i class="fa fa-skype"></i>Reset</button>
-                                    <button id="btnGPSTemplateDownload" type="button" onclick="return Reset();" class="btn  btn-outline-secondary btn-md"><i class="fa fa-download"></i>Sample</button>
+                                    <button id="btnSensorTemplateDownload" type="button" onclick="return Reset();" class="btn  btn-outline-secondary btn-md"><i class="fa fa-download"></i>Sample</button>
                                 </div>
 
                             </div>
@@ -217,19 +251,23 @@
     <script>
 
         $(document).ready(function () {
-            GetGPSList('1');
+            GetSensorList('1');
         });
         function Save() {
          
             try {
                 var data = {
                     'id':Number($("#hdnID").val()),
-                    'gpsId':($("#hdnGPSID").val()),
+                    'SensorId':($("#hdnSensorID").val()),
                     'vender': $("#txtVendorName").val().trim(),
                     'dop': $("#calDOP").val(),
                     'deviceModel': $("#txtDeviceModel").val().trim(),
                     'atModel': $("#txtAtModel").val().trim(),
-                    'imeiNo': $("#txtIMEINo").val().trim(),
+                    'maC_No': $("#txtMACNo").val().trim(),
+                    'serial_No': $("#txtSerialNo").val().trim(),
+                    'device_Id': $("#txtDeviceId").val().trim(),
+                    'length': $("#txtLength").val().trim(),
+                    'description': $("#txtDescription").val().trim(),
                     'status': $("#ddlStatus option:selected").val().trim(),
                     // 'isActive': Boolean($("#ddlIsActive option:selected").val().trim()),
                     'isActive':true,
@@ -240,7 +278,7 @@
                 data = JSON.stringify(data);
                 
                 $.ajax({
-                    url: "http://localhost:5000/api/GpsMaster/CreateCommand",
+                    url: "http://localhost:5000/api/SensorMaster/CreateCommand",
                     type: "POST",
                     data: data,
                     dataType: "json",
@@ -251,7 +289,7 @@
                     success: function (result) {
                         console.log(result);
                         alertmsg("Good Job! ", "Record Save Successfully !!!", "success");
-                        GetGPSList('1');
+                        GetSensorList('1');
                         Reset();
                     },
                     error: function (request, status, error) {
@@ -282,7 +320,11 @@
             $("#calDOP").val('');
             $("#txtDeviceModel").val('');
             $("#txtATModel").val('');
-            $("#txtIMEINo").val('');
+            $("#txtMACNo").val('');
+            $("#txtSerialNo").val('');
+            $("#txtDeviceId").val('');
+            $("#txtLength").val('');
+            $("#txtDescription").val('');
             $("#ddlStatus").val('');
             $("#ddlIsActive").val('');
             $("#txtRemarks").val('');
@@ -292,12 +334,12 @@
 
 
 
-        function GetGPSList(sel) {
-           // document.getElementById('inlineRadio1').checked='checked';   
+        function GetSensorList(sel) {
+            // document.getElementById('inlineRadio1').checked='checked';   
             LoadingOn();
             $.ajax({
                 type: "GET",
-                url: "http://localhost:5000/api/GpsMaster",
+                url: "http://localhost:5000/api/SensorMaster",
                 data: {"flag":sel},
                 dataType: "json",
                 async: true,
@@ -306,7 +348,7 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     LoadingOff();
-                    var table = $('#tblGpsList').dataTable({
+                    var table = $('#tblSensorList').dataTable({
                         order: [[2, 'desc']],
                         bDestroy: true,
                         data: (data),
@@ -338,12 +380,16 @@
                                   },
                               },
                          { 'data': 'id', "autoWidth": true, "visible": false },
-                         { 'data': 'gpsId', "autoWidth": true, "visible": true },
+                         { 'data': 'sensorId', "autoWidth": true, "visible": true },
                          { 'data': 'vender', "autoWidth": true },
                          { 'data': 'dop', "autoWidth": true },
                          { 'data': 'deviceModel', "autoWidth": true },
                          { 'data': 'atModel', "autoWidth": true },
-                         { 'data': 'imeiNo', "autoWidth": true },
+                         { 'data': 'maC_No', "autoWidth": true },
+                         { 'data': 'serial_No', "autoWidth": true },
+                         { 'data': 'device_Id', "autoWidth": true },
+                         { 'data': 'length', "autoWidth": true },
+                         { 'data': 'description', "autoWidth": true },
                          { 'data': 'status', "autoWidth": true },
                          { 'data': 'remark', "autoWidth": true },
                          { 'data': 'createdBy', "autoWidth": true },
@@ -354,13 +400,13 @@
                         ],
                         dom: '<"html5buttons"B>lTfgitp',
                         buttons: [
-                            { extend: 'copy', columns: [1, 2, 3, 4, 5, 6], exportOptions: { columns: [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15] } },
-                            { extend: 'csv', title: 'GPS List', exportOptions: { columns: [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15] } },
-                            { extend: 'excel', title: 'GPS List', exportOptions: { columns: [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15] } },
-                            { extend: 'pdf', title: 'GPS List', exportOptions: { columns: [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15] } },
+                            { extend: 'copy', columns: [1, 2, 3, 4, 5, 6], exportOptions: { columns: [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15,16,17,18,19] } },
+                            { extend: 'csv', title: 'Sensor List', exportOptions: { columns: [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15,16,17,18,19] } },
+                            { extend: 'excel', title: 'Sensor List', exportOptions: { columns: [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15,16,17,18,19] } },
+                            { extend: 'pdf', title: 'Sensor List', exportOptions: { columns: [ 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15,16,17,18,19] } },
 
                             {
-                                extend: 'print', exportOptions: { columns: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15] },
+                                extend: 'print', exportOptions: { columns: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,14,15,16,17,18,19] },
                                 customize: function (win) {
                                     $(win.document.body).addClass('white-bg');
                                     $(win.document.body).css('font-size', '10px');
@@ -385,14 +431,14 @@
                     });
 
                     //Edit button Functionality in the DataTable
-                    $('#tblGpsList tbody').on('click', '#btnUpdate', function () {
-                        var table = $('#tblGpsList').DataTable();
+                    $('#tblSensorList tbody').on('click', '#btnUpdate', function () {
+                        var table = $('#tblSensorList').DataTable();
                         var data = table.row($(this).parents('tr')).data();
                         // alert(data.dop);
                         document.getElementById("btnSave").value = 'Update';
                         //document.getElementById("btnSave").textContent = 'Update';
                         document.getElementById("hdnID").value = data["id"];
-                        document.getElementById("hdnGPSID").value = data["gpsId"];
+                        document.getElementById("hdnSensorID").value = data["sensorId"];
 
                         document.getElementById("txtVendorName").value = data["vender"];
                         if (data["dop"] != null && data["dop"] != "") {
@@ -401,10 +447,13 @@
                         else {
                             document.getElementById("calDOP").value = "";
                         }
-                        // document.getElementById("calDOP").value = data["dop"];
                         document.getElementById("txtDeviceModel").value = data["deviceModel"];
                         document.getElementById("txtAtModel").value = data["atModel"];
-                        document.getElementById("txtIMEINo").value = data["imeiNo"];
+                        document.getElementById("txtMACNo").value = data["maC_No"];
+                        document.getElementById("txtSerialNo").value = data["serial_No"];
+                        document.getElementById("txtDeviceId").value = data["device_Id"];
+                        document.getElementById("txtLength").value = data["length"];
+                        document.getElementById("txtDescription").value = data["description"];
                         document.getElementById("ddlStatus").value = data["status"];
                         document.getElementById("txtRemarks").value = data["remark"];
                         //document.getElementById("ddlIsActive").value = data["isActive"];
@@ -412,11 +461,11 @@
                         $('.nav-tabs a[href="#custom-tabs-five-normal"]').tab('show');
                        
                     });
-                    $('#tblGpsList tbody').on('click', '#btnAD', function () {
+                    $('#tblSensorList tbody').on('click', '#btnAD', function () {
                         $(".nav-tabs a").click(function(){
                             $(this).tab('show');
                         });
-                        var table = $('#tblGpsList').DataTable();
+                        var table = $('#tblSensorList').DataTable();
                         var data = table.row($(this).parents('tr')).data();
                         
                         if(data["isActive"]=== true)
@@ -433,7 +482,7 @@
                                 if (result.value) {
                       $.ajax({
                                 type: "DELETE",
-                            url: "http://localhost:5000/api/GpsMaster/"+data.id+"/"+$("#btnAD").val(),
+                            url: "http://localhost:5000/api/SensorMaster/"+data.id+"/"+$("#btnAD").val(),
                             // data: {"Id":data.id},
                             dataType: "json",
                             async: true,
@@ -441,7 +490,7 @@
                             cache: false,
                             contentType: "application/json; charset=utf-8",
                             success: function (data) {
-                                GetGPSList('1');
+                                GetSensorList('1');
                                 Swal.fire('Deleted!','Your file has been deleted.','success')
                                 return;
                             }
@@ -456,14 +505,14 @@
         {
                 $.ajax({
                     type: "DELETE",
-                    url: "http://localhost:5000/api/GpsMaster/"+data.id+"/"+$("#btnAD").val(),
+                    url: "http://localhost:5000/api/SensorMaster/"+data.id+"/"+$("#btnAD").val(),
                     dataType: "json",
                     async: true,
                     // crossDomain: true,
                     cache: false,
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
-                        GetGPSList('0');
+                        GetSensorList('0');
                         swal.fire({
                             title: 'Activated',
                             text: '',

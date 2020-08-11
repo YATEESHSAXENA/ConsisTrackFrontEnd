@@ -191,6 +191,12 @@
                                         <p>Sim Master</p>
                                     </a>
                                 </li>
+                                    <li class="nav-item">
+                                    <a href="SensorMasterFrm.aspx" class="nav-link">
+                                        <i class="fas nav-icon fa-sim-card"></i>
+                                        <p>Sensor Master</p>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <li class="nav-item">
@@ -292,14 +298,15 @@
                 html:htmltext,
             });
         }
-        function on() {
-            document.getElementById("overlay").style.display = "block";
-        }
 
-        function off() {
+         <%--------- Loading screen function--%>
+        function LoadingOn() {
+            document.getElementById("overlay").style.display = "";
+        }
+        function LoadingOff() {
             document.getElementById("overlay").style.display = "none";
         }
-       
+          <%------------------------------%>
     </script>
 </body>
 
